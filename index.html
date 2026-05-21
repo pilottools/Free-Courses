@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnePilot (Online Courses)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --border-color: #eeeeee;
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.04);
+            --shadow-hover: 0 12px 40px rgba(0,0,0,0.08);
+            --accent: #5352ed;
+            --accent-light: #7a7aff;
+            --accent-glow: rgba(83, 82, 237, 0.15);
+        }
+
+        body { background: var(--bg-primary); min-height: 100vh; }
+
+        .main-content { padding: 25px; }
+
+        /* Logo */
+        .logo { font-size: 20px; font-weight: 800; color: var(--accent); text-align: center; margin-bottom: 20px; }
+
+        /* Search */
+        .search-area { width: 100%; max-width: 500px; margin: 0 auto 30px; position: sticky; top: 15px; z-index: 100; }
+        .search-wrap { position: relative; }
+        .search-box { width: 100%; padding: 12px 20px 12px 50px; border-radius: 40px; border: 1px solid #e2e8f0; outline: none; font-size: 14px; font-family: 'Poppins', sans-serif; box-shadow: var(--shadow-soft); transition: all 0.25s ease; background: var(--bg-primary); }
+        .search-box:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow), var(--shadow-hover); transform: translateY(-2px); }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 16px; pointer-events: none; }
+
+        /* Section */
+        .section { margin-bottom: 30px; }
+        .section-label { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-bottom: 15px; padding-left: 4px; display: flex; align-items: center; gap: 10px; }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 220px)); gap: 18px; }
+
+        /* Card */
+        .card { background: var(--bg-primary); width: 100%; height: 300px; border-radius: 14px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; overflow: visible; box-shadow: var(--shadow-soft); cursor: pointer; border: 1px solid var(--border-color); position: relative; text-decoration: none; }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); opacity: 0; transition: opacity 0.3s ease; border-radius: 14px 14px 0 0; }
+        .card:hover { transform: translateY(-6px) scale(1.015); box-shadow: var(--shadow-hover); border-color: var(--accent); z-index: 5; }
+        .card:hover::before { opacity: 1; }
+
+        .img-box { height: 160px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; overflow: visible; border-radius: 14px 14px 0 0; flex-shrink: 0; }
+        .img-box::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%); opacity: 0; transition: opacity 0.3s ease; border-radius: 14px 14px 0 0; }
+        .card:hover .img-box::after { opacity: 1; }
+        .img-box img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease; position: relative; z-index: 1; }
+        .card:hover img { transform: scale(1.08); }
+
+        .text-box { padding: 15px 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .text-box h3 { font-size: 13px; font-weight: 700; color: var(--text-primary); transition: color 0.25s ease; line-height: 1.3; }
+        .card:hover .text-box h3 { color: var(--accent); }
+
+        .card-btn { background: linear-gradient(45deg, var(--accent), var(--accent-light)); color: white; text-align: center; padding: 12px 0; font-size: 12px; font-weight: 600; transition: all 0.25s ease; position: relative; overflow: hidden; border-radius: 0 0 14px 14px; margin: 0 10px 10px 10px; width: calc(100% - 20px); flex-shrink: 0; }
+        .card-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.4s ease; }
+        .card:hover .card-btn::before { left: 100%; }
+        .card:hover .card-btn { box-shadow: 0 6px 20px rgba(83,82,237,0.3); }
+
+        @media (max-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+
+    <div class="logo">OnePilot (Online Courses)</div>
+
+    <div class="search-area">
+        <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" class="search-box" id="searchInp" placeholder="Search any tool..." oninput="handleSearch(this.value)" onkeydown="handleEnter(event)" autocomplete="off">
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="section" id="searchSection" style="display:none;">
+        <div class="section-label">🔍 Search Results</div>
+        <div class="grid" id="searchGrid"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <div class="section">
+            <div class="section-label">💰 Online Earning</div>
+            <div class="grid" id="earnGrid"></div>
+        </div>
+        <div class="section">
+            <div class="section-label">🎬 Video Editing</div>
+            <div class="grid" id="editGrid"></div>
+        </div>
+        <div class="section">
+            <div class="section-label">💼 MS Office</div>
+            <div class="grid" id="officeGrid"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const cards = {
+        earn: [
+          { name: 'Canva',      img: 'https://freepnglogo.com/images/all_img/1691829400logo-canva-png.png',       link: 'https://www.mediafire.com/file/1m1bu6plo37a92t/(Pro)+Canva+Course.zip/file' },  
+          { name: 'Daraz',      img: 'https://static.vecteezy.com/system/resources/previews/067/565/438/non_2x/daraz-rounded-logo-design-free-png.png',       link: 'https://www.mediafire.com/file/uzx564betwaxlpn/(Pro)+Daraz+Course.zip/file' },
+            { name: 'Fiverr',         img: 'https://img.icons8.com/ios_filled/512/40C057/fiverr--v2.png',       link: 'https://www.mediafire.com/file/ioyivp7cjkhd09c/(Pro)+Fiver+Course.zip/file' },
+            { name: 'Shopify',  img: 'https://cdn.iconscout.com/icon/free/png-256/free-shopify-logo-icon-svg-download-png-2945149.png?f=webp',      link: 'https://www.mediafire.com/file/nm0tq0r4slzp7m5/%2528Pro%2529_Shopify_Course.zip/file' },
+            { name: 'Red Bubble', img: 'https://cdn.iconscout.com/icon/free/png-256/free-redbubble-logo-icon-svg-download-png-3030241.png?resize=512,512&ssl=1', link: 'https://www.mediafire.com/file/d4rhba0m9mkrha5/Red+Bubble+(1-7).exe/file' },
+          { name: 'Amazon',  img: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Amazon_icon.png',      link: 'https://www.mediafire.com/file/5nlsgaj8wawrxyg/(Pro)+Amazon+Course.zip/file' },
+          { name: 'Ebay',  img: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg',      link: 'https://www.mediafire.com/file/8id1benh89ka364/(Pro)+Ebay+Course.zip/file' },
+          { name: 'Etsy',  img: 'https://freelogopng.com/images/all_img/1659110030etsy-icon-png.png',      link: 'https://www.mediafire.com/file/eksstraua6fgc74/Etsy+(1-9).exe/file' },
+        { name: 'Gumroad',  img: 'https://brandlogos.net/wp-content/uploads/2025/11/gumroad_icon_brandlogos.net_zpgig-512x506.png',      link: 'https://www.mediafire.com/file/2f9kn791eshgwrh/(Pro)+Gumroad+Course.zip/file' },
+           { name: 'Pinterest',  img: 'https://www.freepnglogos.com/uploads/pinterest-logo-p-png-0.png',      link: 'https://www.mediafire.com/file/w22mmdsbu8nfm4n/(Pro)+Pinterest+Course.zip/file' }
+        ],
+        edit: [
+            { name: 'Filmora 2025', img: 'https://static.vecteezy.com/system/resources/previews/048/759/330/non_2x/filmora-transparent-icon-free-png.png', link: 'https://www.mediafire.com/file/wgn4hppg646k0ju/Filmora+++Key.rar/file' },
+            { name: 'Camtasia',     img: 'https://lehrpfade.th-koeln.de/wp-content/uploads/2022/04/Camtasia_Logo.webp',                                   link: 'https://www.mediafire.com/file/ef45ocsjz9xa1ab/Camtasia_9.0.rar/file' },
+            { name: 'Handbrake',    img: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/HandBrake_Icon.png',                                        link: 'https://www.mediafire.com/file/luhdq4yuk2v9ivu/HandBrake_V1.9.0.exe/file' },
+            { name: 'VLC Media Player', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/VLC_Icon.svg/960px-VLC_Icon.svg.png',             link: 'https://www.mediafire.com/file/dyeuswvvse1tutb/vlc-3.0.20-win64.exe/file' }
+        ],
+        office: [
+            { name: 'MS Office 2016',             img: 'https://img.utdstc.com/icon/dcc/387/dcc38728dbc270465816a1db09b3569255ca48cfcac8047eb2088fdd78d0f8c0:200',                    link: 'https://www.mediafire.com/file/a7c4tn6nv100xn7/Microsoft+Office+2016+Professional.zip/file' },
+            { name: 'Office & Windows Activator', img: 'https://media.imgcdn.org/repo/2023/03/microsoft-activation-scripts/68997f561743f-microsoft-activation-scripts-Icon.webp', link: 'https://www.mediafire.com/file/tnf068euzwrphuw/HEU.rar/file' },
+            { name: 'PDF to Word',                img: 'https://pdf.net/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpdf-to-word-2.4457c7e7.png&w=256&q=75',                       link: 'https://www.pdfgear.com/pdf-to-word/' },
+            { name: 'Word to PDF',                img: 'https://pdf.net/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fword-to-pdf-2.e8fe5e86.png&w=256&q=75',                       link: 'https://www.pdfgear.com/word-to-pdf/' }
+        ]
+    };
+
+    const allTools = [...cards.earn, ...cards.edit, ...cards.office];
+
+    function makeCard(t) {
+        return `<a class="card" href="${t.link}" target="_blank" rel="noopener">
+            <div class="img-box"><img src="${t.img}" onerror="this.src='https://cdn-icons-png.flaticon.com/128/2965/2965278.png'" alt="${t.name}"></div>
+            <div class="text-box"><h3>${t.name}</h3></div>
+            <div class="card-btn">Open Link ↗</div>
+        </a>`;
+    }
+
+    function renderAll() {
+        document.getElementById('earnGrid').innerHTML   = cards.earn.map(makeCard).join('');
+        document.getElementById('editGrid').innerHTML   = cards.edit.map(makeCard).join('');
+        document.getElementById('officeGrid').innerHTML = cards.office.map(makeCard).join('');
+    }
+
+    function handleEnter(e) {
+        if (e.key !== 'Enter') return;
+        const q = document.getElementById('searchInp').value.trim().toLowerCase();
+        if (!q) return;
+        const match = allTools.find(t => t.name.toLowerCase().includes(q));
+        if (match) window.open(match.link, '_blank');
+    }
+
+    function handleSearch(val) {
+        const q = val.trim().toLowerCase();
+        const ss = document.getElementById('searchSection');
+        const mc = document.getElementById('mainContent');
+        if (!q) { ss.style.display = 'none'; mc.style.display = 'block'; return; }
+        const res = allTools.filter(t => t.name.toLowerCase().includes(q));
+        ss.style.display = 'block';
+        mc.style.display = 'none';
+        document.getElementById('searchGrid').innerHTML = res.length
+            ? res.map(makeCard).join('')
+            : `<p style="color:#666;font-size:13px;grid-column:1/-1;padding:10px 0;">Koi tool nahi mila "<b>${val}</b>" ke liye.</p>`;
+    }
+
+    renderAll();
+</script>
+</body>
+</html>
